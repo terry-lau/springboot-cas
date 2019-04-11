@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easydatalink.tech.mapper.base.SystemLogMapper" >
+  <resultMap id="BaseResultMap" type="com.easydatalink.tech.entity.base.SystemLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="method" property="method" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="request_ip" property="requestIp" jdbcType="VARCHAR" />
+    <result column="exception_code" property="exceptionCode" jdbcType="VARCHAR" />
+    <result column="params" property="params" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="platform_no" property="platformNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.easydatalink.tech.entity.base.SystemLog" extends="BaseResultMap" >
+    <result column="exception_detail" property="exceptionDetail" jdbcType="CLOB" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, description, method, type, request_ip, exception_code, params, create_date, create_by, 
+    modify_date, modify_by, platform_no
+  </sql>
+  <sql id="Blob_Column_List" >
+    exception_detail
+  </sql>
+  
+   <select id="findByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	  select  
+ 	   <include refid="Base_Column_List" />
+ 	  	 from t_system_log
+ 	  <where>
+  			<trim prefix="(" suffix=")" prefixOverrides="and">
+  				<if test="type != null">
+					AND type =#{type}
+      			</if>
+      			<if test="description != null">
+      				AND description like '%'||#{description}||'%'
+      			</if>
+      			<if test="params != null and params != '' ">
+      				AND params like '%'||#{params}||'%'
+      			</if>
+      			<if test="startDate != null and startDate != ''">
+					and create_date &gt;= to_date(#{startDate},'yyyy-mm-dd hh24:mi:ss')
+      			</if>
+      			<if test="endDate != null and endDate != ''">
+					and create_date &lt;= to_date(#{endDate},'yyyy-mm-dd hh24:mi:ss')
+      			</if>
+  			</trim>
+  		</where>
+  		order by create_date desc
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_system_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_system_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.easydatalink.tech.entity.base.SystemLog" >
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT T_SYSTEM_LOG_SEQ.Nextval as ID from DUAL  
+   </selectKey>  
+    insert into t_system_log (id, description, method, 
+      type, request_ip, exception_code, 
+      params, create_date, create_by, 
+      modify_date, modify_by, platform_no, 
+      exception_detail)
+    values (#{id,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{requestIp,jdbcType=VARCHAR}, #{exceptionCode,jdbcType=VARCHAR}, 
+      #{params,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{modifyDate,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{platformNo,jdbcType=VARCHAR}, 
+      #{exceptionDetail,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.easydatalink.tech.entity.base.SystemLog" >
+	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT T_SYSTEM_LOG_SEQ.Nextval as ID from DUAL  
+   </selectKey>  
+    insert into t_system_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="method != null" >
+        method,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="requestIp != null" >
+        request_ip,
+      </if>
+      <if test="exceptionCode != null" >
+        exception_code,
+      </if>
+      <if test="params != null" >
+        params,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="platformNo != null" >
+        platform_no,
+      </if>
+      <if test="exceptionDetail != null" >
+        exception_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="requestIp != null" >
+        #{requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionCode != null" >
+        #{exceptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="platformNo != null" >
+        #{platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionDetail != null" >
+        #{exceptionDetail,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.easydatalink.tech.entity.base.SystemLog" >
+    update t_system_log
+    <set >
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="requestIp != null" >
+        request_ip = #{requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionCode != null" >
+        exception_code = #{exceptionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        params = #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="platformNo != null" >
+        platform_no = #{platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionDetail != null" >
+        exception_detail = #{exceptionDetail,jdbcType=CLOB},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.easydatalink.tech.entity.base.SystemLog" >
+    update t_system_log
+    set description = #{description,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      request_ip = #{requestIp,jdbcType=VARCHAR},
+      exception_code = #{exceptionCode,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      platform_no = #{platformNo,jdbcType=VARCHAR},
+      exception_detail = #{exceptionDetail,jdbcType=CLOB}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.easydatalink.tech.entity.base.SystemLog" >
+    update t_system_log
+    set description = #{description,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      request_ip = #{requestIp,jdbcType=VARCHAR},
+      exception_code = #{exceptionCode,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      platform_no = #{platformNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

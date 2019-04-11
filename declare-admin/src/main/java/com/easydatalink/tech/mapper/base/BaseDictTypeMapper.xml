@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easydatalink.tech.mapper.base.BaseDictTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.easydatalink.tech.entity.base.BaseDictType" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="DICTTYPE_CODE" property="dicttypeCode" jdbcType="VARCHAR" />
+    <result column="DICTTYPE_NAME" property="dicttypeName" jdbcType="VARCHAR" />
+    <result column="IS_REMOVED" property="isRemoved" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   
+    ID, DICTTYPE_CODE, DICTTYPE_NAME, IS_REMOVED
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BASE_DICTTYPE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from T_BASE_DICTTYPE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insert" parameterType="com.easydatalink.tech.entity.base.BaseDictType" >
+  
+ 	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT T_BASE_DICTTYPE_SEQ.Nextval as ID from DUAL  
+   </selectKey> 
+    insert into T_BASE_DICTTYPE (ID, DICTTYPE_CODE, DICTTYPE_NAME, 
+      IS_REMOVED)
+    values (#{id,jdbcType=DECIMAL}, #{dicttypeCode,jdbcType=VARCHAR}, #{dicttypeName,jdbcType=VARCHAR}, 
+      #{isRemoved,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.easydatalink.tech.entity.base.BaseDictType" >
+    insert into T_BASE_DICTTYPE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dicttypeCode != null" >
+        DICTTYPE_CODE,
+      </if>
+      <if test="dicttypeName != null" >
+        DICTTYPE_NAME,
+      </if>
+      <if test="isRemoved != null" >
+        IS_REMOVED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="dicttypeCode != null" >
+        #{dicttypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dicttypeName != null" >
+        #{dicttypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemoved != null" >
+        #{isRemoved,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.easydatalink.tech.entity.base.BaseDictType" >
+    update T_BASE_DICTTYPE
+    <set >
+      <if test="dicttypeCode != null" >
+        DICTTYPE_CODE = #{dicttypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dicttypeName != null" >
+        DICTTYPE_NAME = #{dicttypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemoved != null" >
+        IS_REMOVED = #{isRemoved,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.easydatalink.tech.entity.base.BaseDictType" >
+    update T_BASE_DICTTYPE
+    set DICTTYPE_CODE = #{dicttypeCode,jdbcType=VARCHAR},
+      DICTTYPE_NAME = #{dicttypeName,jdbcType=VARCHAR},
+      IS_REMOVED = #{isRemoved,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+   <select id="getAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BASE_DICTTYPE
+    where IS_REMOVED='0'
+  </select>
+  
+   <!-- 根据dictType_code查询字典列表 -->
+  <select id="queryListByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		select * from t_base_dicttype 
+  		<where>
+  			DICTTYPE_CODE = #{code, jdbcType=VARCHAR}
+  			and IS_REMOVED='0'
+  		</where>
+  </select>
+  
+   <select id="findByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	  select  
+ 	   <include refid="Base_Column_List" />
+ 	  	 from t_base_dicttype
+ 	  	<where>
+  			<trim prefix="(" suffix=")" prefixOverrides="and">
+  				and 1=1
+      			<if test="dicttypeCode != null and dicttypeCode != ''">
+					and DICTTYPE_CODE = #{dicttypeCode, jdbcType=VARCHAR}
+      			</if>
+      			<if test="dicttypeName != null and dicttypeName != ''">
+					and DICTTYPE_NAME = #{dicttypeName, jdbcType=VARCHAR}
+      			</if>
+  			</trim>
+  		</where>
+  </select>
+</mapper>

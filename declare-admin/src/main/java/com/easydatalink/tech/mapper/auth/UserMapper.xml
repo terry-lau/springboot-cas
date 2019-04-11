@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easydatalink.tech.mapper.auth.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.easydatalink.tech.entity.auth.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_code" property="userCode" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="cellphone" property="cellphone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="user_role" property="userRole" jdbcType="VARCHAR" />
+    <result column="login_status" property="loginStatus" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+    <result column="is_removed" property="isRemoved" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="platform_no" property="platformNo" jdbcType="VARCHAR" />
+    <result column="jsonauthority" property="jsonauthority" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, user_code, user_name, login_name, password, sex, company_id, company_code, company_name, 
+    birthday, email, cellphone, address, status, user_role, login_status, user_type, 
+    is_removed, version, create_date, create_by, modify_date, modify_by, platform_no,jsonauthority
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="getAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_ac_user
+    where is_removed ='0'
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_ac_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.easydatalink.tech.entity.auth.User" >
+    <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT T_AC_USER_SEQ.Nextval as ID from DUAL  
+   </selectKey>
+    insert into t_ac_user (id, user_code, user_name, 
+      login_name, password, sex, 
+      company_id, company_code, company_name, 
+      birthday, email, cellphone, 
+      address, status, user_role, 
+      login_status, user_type, is_removed, 
+      version, create_date, create_by, 
+      modify_date, modify_by, platform_no,jsonauthority
+      )
+    values (#{id,jdbcType=BIGINT}, #{userCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=BIGINT}, #{companyCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{cellphone,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{userRole,jdbcType=VARCHAR}, 
+      #{loginStatus,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{isRemoved,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{modifyDate,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{platformNo,jdbcType=VARCHAR}
+      , #{jsonauthority,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.easydatalink.tech.entity.auth.User" >
+ 	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT T_AC_USER_SEQ.Nextval as ID from DUAL  
+   </selectKey>
+    insert into t_ac_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userCode != null" >
+        user_code,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="loginName != null" >
+        login_name,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="cellphone != null" >
+        cellphone,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="userRole != null" >
+        user_role,
+      </if>
+      <if test="loginStatus != null" >
+        login_status,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="isRemoved != null" >
+        is_removed,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="platformNo != null" >
+        platform_no,
+      </if>
+      <if test="jsonauthority != null" >
+        jsonauthority,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null" >
+        #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="loginStatus != null" >
+        #{loginStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemoved != null" >
+        #{isRemoved,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="platformNo != null" >
+        #{platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonauthority != null" >
+        #{jsonauthority,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.easydatalink.tech.entity.auth.User" >
+    update t_ac_user
+    <set >
+      <if test="userCode != null" >
+        user_code = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName != null" >
+        login_name = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        cellphone = #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null" >
+        user_role = #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="loginStatus != null" >
+        login_status = #{loginStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemoved != null" >
+        is_removed = #{isRemoved,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="platformNo != null" >
+        platform_no = #{platformNo,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonauthority != null" >
+        jsonauthority = #{jsonauthority,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.easydatalink.tech.entity.auth.User" >
+    update t_ac_user
+    set user_code = #{userCode,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      login_name = #{loginName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      cellphone = #{cellphone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      user_role = #{userRole,jdbcType=VARCHAR},
+      login_status = #{loginStatus,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=VARCHAR},
+      is_removed = #{isRemoved,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      platform_no = #{platformNo,jdbcType=VARCHAR},
+      jsonauthority = #{jsonauthority,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <select id="getByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	  select  
+ 	   <include refid="Base_Column_List" />
+ 	  	from t_ac_user
+ 	  <where>
+  			<trim prefix="(" suffix=")" prefixOverrides="and">
+  				<if test="userName != null">
+					and user_name = #{userName,jdbcType=VARCHAR}
+      			</if>
+      			<if test="userCode != null">
+					and user_code = #{userCode,jdbcType=VARCHAR}
+      			</if>
+  				<if test="loginName != null">
+					and login_name = #{loginName,jdbcType=VARCHAR}
+      			</if>
+      			<if test="companyId != null">
+					and company_id = #{companyId,jdbcType=VARCHAR}
+      			</if>
+      			<if test="companyCode != null">
+					and company_code = #{companyCode,jdbcType=VARCHAR}
+      			</if>
+      			<if test="status != null">
+		  		 	and status = #{status,jdbcType=VARCHAR}
+  				</if>
+  				<if test="userRole != null">
+					and user_role = #{userRole,jdbcType=VARCHAR}
+      			</if>
+      			<if test="userType != null">
+					and user_type = #{userType,jdbcType=VARCHAR}
+      			</if>
+  				<if test="platformNo != null">
+		  		 	and platform_no = #{platformNo,jdbcType=VARCHAR}
+  				</if>
+  			</trim>
+  			and is_removed ='0'
+  		</where>
+  </select>
+
+	<select id="getUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT *
+	  FROM t_ac_user t
+	 where t.is_removed = '0'
+	   and t.login_name = #{loginName}
+	   and rownum = 1
+	</select>
+	
+</mapper>

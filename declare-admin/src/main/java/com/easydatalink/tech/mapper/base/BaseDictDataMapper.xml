@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easydatalink.tech.mapper.base.BaseDictDataMapper" >
+  <resultMap id="BaseResultMap" type="com.easydatalink.tech.entity.base.BaseDictData" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="DICT_ID" property="dictId" jdbcType="DECIMAL" />
+    <result column="DICT_CODE" property="dictCode" jdbcType="VARCHAR" />
+    <result column="DICT_NAME" property="dictName" jdbcType="VARCHAR" />
+    <result column="IS_REMOVED" property="isRemoved" jdbcType="VARCHAR" />
+    <result column="SORT_NO" property="sortNo" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ID, DICT_ID, DICT_CODE, DICT_NAME, IS_REMOVED, SORT_NO
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BASE_DICTDATA
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from T_BASE_DICTDATA
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+  <insert id="insert" parameterType="com.easydatalink.tech.entity.base.BaseDictData" >
+  
+   <selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id">  
+       SELECT T_BASE_DICTDATA_SEQ.Nextval as ID from DUAL  
+   </selectKey>
+    insert into T_BASE_DICTDATA (ID, DICT_ID, DICT_CODE, 
+      DICT_NAME, IS_REMOVED, SORT_NO
+      )
+    values (#{id}, #{dictId,jdbcType=DECIMAL}, #{dictCode,jdbcType=VARCHAR}, 
+      #{dictName,jdbcType=VARCHAR}, #{isRemoved,jdbcType=VARCHAR}, #{sortNo,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.easydatalink.tech.entity.base.BaseDictData" >
+    insert into T_BASE_DICTDATA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dictId != null" >
+        DICT_ID,
+      </if>
+      <if test="dictCode != null" >
+        DICT_CODE,
+      </if>
+      <if test="dictName != null" >
+        DICT_NAME,
+      </if>
+      <if test="isRemoved != null" >
+        IS_REMOVED,
+      </if>
+      <if test="sortNo != null" >
+        SORT_NO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="dictId != null" >
+        #{dictId,jdbcType=DECIMAL},
+      </if>
+      <if test="dictCode != null" >
+        #{dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null" >
+        #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemoved != null" >
+        #{isRemoved,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null" >
+        #{sortNo,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.easydatalink.tech.entity.base.BaseDictData" >
+    update T_BASE_DICTDATA
+    <set >
+      <if test="dictId != null" >
+        DICT_ID = #{dictId,jdbcType=DECIMAL},
+      </if>
+      <if test="dictCode != null" >
+        DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictName != null" >
+        DICT_NAME = #{dictName,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemoved != null" >
+        IS_REMOVED = #{isRemoved,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null" >
+        SORT_NO = #{sortNo,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.easydatalink.tech.entity.base.BaseDictData" >
+    update T_BASE_DICTDATA
+    set DICT_ID = #{dictId,jdbcType=DECIMAL},
+      DICT_CODE = #{dictCode,jdbcType=VARCHAR},
+      DICT_NAME = #{dictName,jdbcType=VARCHAR},
+      IS_REMOVED = #{isRemoved,jdbcType=VARCHAR},
+      SORT_NO = #{sortNo,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="getByDictTypeId" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	  SELECT  
+ 	   <include refid="Base_Column_List" />
+ 	  	from T_BASE_DICTDATA
+ 	  <where>
+  			<trim prefix="(" suffix=")" prefixOverrides="and">
+  				<if test="dictId != null">
+					and DICT_ID = #{dictId,jdbcType=DECIMAL}
+      			</if>
+  			</trim>
+  	  </where>
+  	   ORDER BY SORT_NO
+  </select>
+  <select id="findTaxStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+ 	  	select 
+	 	  	t1.dict_id,
+	 	  	t1.dict_code,
+	 	  	t1.dict_name,
+	 	  	t1.sort_no,
+	 	  	t1.is_removed
+ 	  	from t_base_dictdata t1 left join t_base_dicttype t2 on t1.dict_id = t2.id 
+		where t2.dicttype_code = 'TAX_STATUS'
+  </select>
+  <select id="findReportStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+ 	  <!-- select 
+ 	  	t1.dict_id,
+ 	  	t1.dict_code,
+ 	  	t1.dict_name,
+ 	  	t1.sort_no,
+ 	  	t1.is_removed
+ 	  	from t_base_dictdata t1 left join t_base_dicttype t2 on t1.dict_id = t2.id 
+		where t2.dicttype_code = 'REPORT_STATUS' -->
+		select 
+ 	  	t1.dict_id,
+ 	  	t1.dict_code,
+ 	  	t1.dict_name,
+ 	  	t1.sort_no,
+ 	  	t1.is_removed
+ 	  	from t_base_dictdata t1 where t1.dict_id = '9'
+  </select>
+  <select id="findAuditStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+ 	  <!-- select 
+ 	  	t1.dict_id,
+ 	  	t1.dict_code,
+ 	  	t1.dict_name,
+ 	  	t1.sort_no,
+ 	  	t1.is_removed
+ 	  	from t_base_dictdata t1 left join t_base_dicttype t2 on t1.dict_id = t2.id 
+		where t2.dicttype_code = 'AUDIT_STATUS' -->
+		select 
+ 	  	t1.dict_id,
+ 	  	t1.dict_code,
+ 	  	t1.dict_name,
+ 	  	t1.sort_no,
+ 	  	t1.is_removed
+ 	  	from t_base_dictdata t1 where t1.dict_id = '40'
+  </select>
+  <select id="getByDictTypeByValues" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	  select  
+ 	   <include refid="Base_Column_List" />
+ 	  	from T_BASE_DICTDATA
+ 	  <where>
+  			<trim prefix="(" suffix=")" prefixOverrides="and">
+  				<if test="dictId != null">
+					and DICT_ID = #{dictId,jdbcType=DECIMAL}
+      			</if>
+      			<if test="dictCode != null">
+					and DICT_CODE = #{dictCode,jdbcType=DECIMAL}
+      			</if>
+      			<if test="dictName != null">
+					and DICT_NAME = #{dictName,jdbcType=DECIMAL}
+      			</if>
+  			</trim>
+  	  </where>
+  </select>
+  
+  
+  <select id="queryByDicttypeCode" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 	  	select t.*
+	 	from T_BASE_DICTDATA t 
+		left join t_base_dicttype dt on t.dict_id=dt.id
+		where 
+		t.is_removed='0'
+		and dt.dicttype_code=#{dicttypeCode}
+		<if test="dictCode != null">
+		 	AND t.dict_code =#{dictCode}
+      	</if>
+		order by t.dict_code desc
+   </select>
+  
+  
+</mapper>
